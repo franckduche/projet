@@ -17,7 +17,11 @@ class User {
     private $nickname;
     private $password;
     
-    function __construct($phoneNumber = null, $nickname = null, $password = null, $id = null) {
+    private $friendlist;
+    private $opinionList;
+    private $opinionToAnswerList;
+    
+    function __construct($id = null, $phoneNumber = null, $nickname = null, $password = null) {
         $this->id = $id;
         $this->phoneNumber = $phoneNumber;
         $this->nickname = $nickname;
@@ -62,4 +66,27 @@ class User {
         $this->password = $password;
     }
 
+    public function getFriendlist() {
+        return $this->friendlist;
+    }
+
+    public function getOpinionList() {
+        return $this->opinionList;
+    }
+
+    public function getOpinionToAnswerList() {
+        return $this->opinionToAnswerList;
+    }
+
+    public function setFriendlist($friendlist) {
+        $this->friendlist = $friendlist;
+    }
+
+    public function setOpinionList($opinionList) {
+        $this->opinionList = $opinionList;
+    }
+
+    public function setOpinionToAnswerList($opinionToAnswerList) {
+        $this->opinionToAnswerList = $opinionToAnswerList;
+    }
 }
