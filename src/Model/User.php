@@ -17,7 +17,7 @@ class User {
     private $nickname;
     private $password;
     
-    function __construct($phoneNumber, $nickname, $password, $id = null) {
+    function __construct($phoneNumber = null, $nickname = null, $password = null, $id = null) {
         $this->id = $id;
         $this->phoneNumber = $phoneNumber;
         $this->nickname = $nickname;
