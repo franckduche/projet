@@ -16,6 +16,9 @@ abstract class Opinion {
     protected $date;
     protected $comment;
     
+    protected $owner;
+    protected $userList;
+    
     function __construct($id = null, $date = null, $comment = null) {
         $this->id = $id;
         $this->date = $date;
@@ -44,5 +47,21 @@ abstract class Opinion {
 
     public function setComment($comment) {
         $this->comment = $comment;
+    }
+    
+    public function getOwner() {
+        return $this->owner;
+    }
+
+    public function getUserList() {
+        return $this->userList;
+    }
+
+    public function setOwner($owner) {
+        $this->owner = $owner;
+    }
+
+    public function setUserList($userList) {
+        $this->userList = $userList;
     }
 }

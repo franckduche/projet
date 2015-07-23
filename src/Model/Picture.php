@@ -16,6 +16,8 @@ class Picture {
     private $filename;
     private $filepath;
     
+    private $opinion;
+    
     function __construct($id = null, $filename = null, $filepath = null) {
         $this->id = $id;
         $this->filename = $filename;
@@ -44,5 +46,13 @@ class Picture {
 
     public function setFilepath($filepath) {
         $this->filepath = $filepath;
+    }
+    
+    public function getOpinion() {
+        return $this->opinion;
+    }
+
+    public function setOpinion($opinion) {
+        $this->opinion = $opinion;
     }
 }
