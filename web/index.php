@@ -34,6 +34,8 @@ $app->get('/', function () use ($app) {
     return $app->redirect('/hello');
 });
 
+$app->get('/test', 'TellMe\Controller\HelloController::testAction');
+
 $app->get('/hello', 'TellMe\Controller\HelloController::greetAllAction');
 
 $app->get('/hello/{nickname}', 'TellMe\Controller\HelloController::greetAction')

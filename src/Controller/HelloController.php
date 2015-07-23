@@ -10,6 +10,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use TellMe\Model\User;
 use TellMe\Adapter\UserAdapter;
+use TellMe\Adapter\OpinionAdapter;
 
 /**
  * Description of HelloController
@@ -33,6 +34,16 @@ class HelloController {
 
         return $app['twig']->render('hello-all.twig', array(
             'users' => $userAdapter->findAll(),
+        ));
+    }
+    
+    public function testAction(Request $request, Application $app)
+    {
+        $opinionAdapter = new OpinionAdapter($app['db']);
+        $userAdapter = new UserAdapter($app['db'], $opinionAdapter);
+        
+        return $app['twig']->render('test.twig', array(
+            'users' => $userAdapter->findAll('full'),
         ));
     }
 }

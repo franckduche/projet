@@ -1,0 +1,11 @@
+{% for user in users %}
+    Id : {{ user.id }} <br />
+    Phone number : {{ user.phoneNumber }} <br />
+    Nickname : {{ user.nickname }} <br />
+    Friends :
+    {% for friend in user.friendList %}
+        ({{ friend.id }} : {{ friend.nickname }}) 
+    {% endfor %}
+    <br />
+    <br />
+{% endfor %}

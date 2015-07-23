@@ -30,8 +30,8 @@ class User {
 	
     public static function fromArray(array $array = array())
     {
-        return new self($array['phoneNumber'], $array['nickname'],
-                $array['password'], $array['id']);
+        return new self($array['id'], $array['phoneNumber'], $array['nickname'],
+                $array['password']);
     }
 
     public function getId() {
