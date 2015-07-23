@@ -17,7 +17,7 @@ class User {
     private $nickname;
     private $password;
     
-    private $friendlist;
+    private $friendList;
     private $opinionList;
     private $opinionToAnswerList;
     
@@ -66,8 +66,8 @@ class User {
         $this->password = $password;
     }
 
-    public function getFriendlist() {
-        return $this->friendlist;
+    public function getFriendList() {
+        return $this->friendList;
     }
 
     public function getOpinionList() {
@@ -78,8 +78,8 @@ class User {
         return $this->opinionToAnswerList;
     }
 
-    public function setFriendlist($friendlist) {
-        $this->friendlist = $friendlist;
+    public function setFriendList($friendList) {
+        $this->friendList = $friendList;
     }
 
     public function setOpinionList($opinionList) {

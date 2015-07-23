@@ -20,7 +20,7 @@ class HelloController {
     
     public function greetAction(Request $request, Application $app, $nickname)
     {
-        $user = new User('0606060606', $nickname, 'aoeu98,2uoe');
+        $user = new User('0606060606', 'aoeu98,2uoe', $nickname);
 
         return $app['twig']->render('hello.twig', array(
             'user' => $user,
