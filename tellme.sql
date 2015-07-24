@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Jeu 23 Juillet 2015 à 14:58
+-- Généré le :  Ven 24 Juillet 2015 à 15:27
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -31,7 +31,14 @@ CREATE TABLE IF NOT EXISTS `choice` (
   `opinionId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `opinionId` (`opinionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `choice`
+--
+
+INSERT INTO `choice` (`id`, `opinionId`) VALUES
+(1, 2);
 
 -- --------------------------------------------------------
 
@@ -46,7 +53,15 @@ CREATE TABLE IF NOT EXISTS `friendlist` (
   PRIMARY KEY (`id`),
   KEY `userId2` (`userId2`),
   KEY `userId1` (`userId1`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `friendlist`
+--
+
+INSERT INTO `friendlist` (`id`, `userId1`, `userId2`) VALUES
+(1, 1, 2),
+(2, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -59,9 +74,18 @@ CREATE TABLE IF NOT EXISTS `opinion` (
   `userId` int(11) NOT NULL,
   `date` date NOT NULL,
   `comment` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `opinion`
+--
+
+INSERT INTO `opinion` (`id`, `userId`, `date`, `comment`, `type`) VALUES
+(1, 1, '2015-07-23', 'aoaoaoaoaoaoaoaoaoo', 'poll'),
+(2, 1, '2015-07-23', 'oeoeoeoeoeoeoeoeoeoe', 'choice');
 
 -- --------------------------------------------------------
 
@@ -73,10 +97,19 @@ CREATE TABLE IF NOT EXISTS `opiniontoanswer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `opinionId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
+  `answer` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `opinionId` (`opinionId`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `opiniontoanswer`
+--
+
+INSERT INTO `opiniontoanswer` (`id`, `opinionId`, `userId`, `answer`) VALUES
+(1, 1, 2, 0),
+(2, 2, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -91,7 +124,16 @@ CREATE TABLE IF NOT EXISTS `picture` (
   `opinionId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `opinionId` (`opinionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `picture`
+--
+
+INSERT INTO `picture` (`id`, `filename`, `filepath`, `opinionId`) VALUES
+(1, 'fic1.png', 'path/path/path', 1),
+(2, 'fic2.png', 'path/path/path', 2),
+(3, 'fic3.png', 'path/path/path', 2);
 
 -- --------------------------------------------------------
 
@@ -104,7 +146,14 @@ CREATE TABLE IF NOT EXISTS `poll` (
   `OpinionId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `OpinionId` (`OpinionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `poll`
+--
+
+INSERT INTO `poll` (`id`, `OpinionId`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -119,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `phoneNumber` (`phoneNumber`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `user`
@@ -127,7 +176,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `phoneNumber`, `nickname`, `password`) VALUES
 (1, '0601010101', 'aaaaaa', 'aaaaaa'),
-(2, '0602020202', 'bbbbbb', 'bbbbbb');
+(2, '0602020202', 'bbbbbb', 'bbbbbb'),
+(3, '0603030303', 'cccccc', 'cccccc');
 
 --
 -- Contraintes pour les tables exportées
@@ -143,8 +193,8 @@ ALTER TABLE `choice`
 -- Contraintes pour la table `friendlist`
 --
 ALTER TABLE `friendlist`
-  ADD CONSTRAINT `friendlist_ibfk_2` FOREIGN KEY (`userId2`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `friendlist_ibfk_1` FOREIGN KEY (`userId1`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `friendlist_ibfk_1` FOREIGN KEY (`userId1`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `friendlist_ibfk_2` FOREIGN KEY (`userId2`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `opinion`
@@ -156,8 +206,8 @@ ALTER TABLE `opinion`
 -- Contraintes pour la table `opiniontoanswer`
 --
 ALTER TABLE `opiniontoanswer`
-  ADD CONSTRAINT `opiniontoanswer_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `opiniontoanswer_ibfk_1` FOREIGN KEY (`opinionId`) REFERENCES `opinion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `opiniontoanswer_ibfk_1` FOREIGN KEY (`opinionId`) REFERENCES `opinion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `opiniontoanswer_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `picture`

@@ -23,6 +23,11 @@ class Picture {
         $this->filename = $filename;
         $this->filepath = $filepath;
     }
+	
+    public static function fromArray(array $array = array())
+    {
+        return new self($array['id'], $array['filename'], $array['filepath']);
+    }
 
     public function getId() {
         return $this->id;

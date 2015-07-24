@@ -15,16 +15,25 @@ abstract class Opinion {
     protected $id;
     protected $date;
     protected $comment;
+    protected $type;
     
     protected $owner;
     protected $userList;
     
-    function __construct($id = null, $date = null, $comment = null) {
+    function __construct($id = null, $date = null, $comment = null, $type = null) {
         $this->id = $id;
         $this->date = $date;
         $this->comment = $comment;
+        $this->type = $type;
     }
-    
+	
+    public static function fromArray(array $array = array())
+    {
+        $class = get_called_class();
+        return new $class($array['id'], $array['date'], $array['comment'],
+                $array['type']);
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -63,5 +72,13 @@ abstract class Opinion {
 
     public function setUserList($userList) {
         $this->userList = $userList;
+    }
+    
+    public function getType() {
+        return $this->type;
+    }
+
+    public function setType($type) {
+        $this->type = $type;
     }
 }

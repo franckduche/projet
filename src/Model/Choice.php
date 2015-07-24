@@ -13,11 +13,8 @@ namespace TellMe\Model;
  */
 class Choice extends Opinion {
     private $pictureList;
-    
-    function __construct($id = null, $date = null, $comment = null, $pictureList = null) {
-        parent::__construct($id, $date, $comment);
-        $this->pictureList = $pictureList;
-    }
+    const TYPE = 'choice';
+    const ADAPTER = 'ChoiceAdapter';
     
     public function getPictureList() {
         return $this->pictureList;

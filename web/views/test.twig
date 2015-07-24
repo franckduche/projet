@@ -1,11 +1,24 @@
+<h1> Users </h1>
 {% for user in users %}
-    Id : {{ user.id }} <br />
-    Phone number : {{ user.phoneNumber }} <br />
+    Id : {{ user.id }}
+    Phone number : {{ user.phoneNumber }}
     Nickname : {{ user.nickname }} <br />
     Friends :
     {% for friend in user.friendList %}
         ({{ friend.id }} : {{ friend.nickname }}) 
+    {% endfor %} <br />
+    Opinions :
+    <ul>
+    {% for opinion in user.opinionList %}
+        <li>({{ opinion.id }} : {{ opinion.date }}) </li>
     {% endfor %}
+    </ul>
+    Opinions auxquelles je dois répondre :
+    <ul>
+    {% for opinionToAnswer in user.opinionToAnswerList %}
+        <li>({{ opinionToAnswer.0.id }} : {{ opinionToAnswer.0.date }} : {{ opinionToAnswer.1 }}) </li>
+    {% endfor %}
+    </ul>
     <br />
     <br />
 {% endfor %}

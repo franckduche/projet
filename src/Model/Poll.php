@@ -13,11 +13,8 @@ namespace TellMe\Model;
  */
 class Poll extends Opinion {
     private $picture;
-    
-    function __construct($id = null, $date = null, $comment = null, $picture = null) {
-        parent::__construct($id, $date, $comment);
-        $this->picture = $picture;
-    }
+    const TYPE = 'poll';
+    const ADAPTER = 'PollAdapter';
 
     public function getPicture() {
         return $this->picture;

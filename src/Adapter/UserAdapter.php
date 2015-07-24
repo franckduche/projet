@@ -35,6 +35,7 @@ class UserAdapter extends BaseAdapter {
             if ($hydrate) {
                 $user->setFriendList($this->getFriendList($user, $hydrate));
                 $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user, $hydrate));
+                $user->setOpinionToAnswerList($this->opinionAdapter->getOpinionToAnswerListByUserId($user, $hydrate));
             }
             $usersArray[] = $user;
         }
@@ -54,6 +55,7 @@ class UserAdapter extends BaseAdapter {
             $user = (new User)->fromArray($line);
             if ($hydrate) {
                 $user->setFriendList($this->getFriendList($user, $hydrate));
+                $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user, $hydrate));
             }
         }
         
