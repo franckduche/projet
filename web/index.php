@@ -30,9 +30,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 /*
  * Routes
  */
-$app->get('/', function () use ($app) {
-    return $app->redirect('/hello');
-});
+$app->get('/', 'TellMe\Controller\OpinionController::toAnswerAction');
 
 $app->get('/test', 'TellMe\Controller\HelloController::testAction');
 

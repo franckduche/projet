@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use TellMe\Model\User;
 use TellMe\Adapter\UserAdapter;
 use TellMe\Adapter\OpinionAdapter;
+use TellMe\Adapter\OpinionToAnswerAdapter;
 
 /**
  * Description of HelloController
@@ -40,7 +41,8 @@ class HelloController {
     public function testAction(Request $request, Application $app)
     {
         $opinionAdapter = new OpinionAdapter($app['db']);
-        $userAdapter = new UserAdapter($app['db'], $opinionAdapter);
+        $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db'], $opinionAdapter);
+        $userAdapter = new UserAdapter($app['db'], $opinionAdapter, $opinionToAnswerAdapter);
         
         return $app['twig']->render('test.twig', array(
             'users' => $userAdapter->findAll('full'),

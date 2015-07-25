@@ -16,7 +16,7 @@
     Opinions auxquelles je dois répondre :
     <ul>
     {% for opinionToAnswer in user.opinionToAnswerList %}
-        <li>({{ opinionToAnswer.0.id }} : {{ opinionToAnswer.0.date }} : {{ opinionToAnswer.1 }}) </li>
+        <li>({{ opinionToAnswer.id }} : {{ opinionToAnswer.date }} : {{ opinionToAnswer.answer }}) </li>
     {% endfor %}
     </ul>
     <br />

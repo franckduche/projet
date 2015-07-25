@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 24 Juillet 2015 à 15:27
+-- Généré le :  Sam 25 Juillet 2015 à 15:13
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -95,6 +95,7 @@ INSERT INTO `opinion` (`id`, `userId`, `date`, `comment`, `type`) VALUES
 
 CREATE TABLE IF NOT EXISTS `opiniontoanswer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
   `opinionId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
   `answer` int(11) NOT NULL,
@@ -107,9 +108,9 @@ CREATE TABLE IF NOT EXISTS `opiniontoanswer` (
 -- Contenu de la table `opiniontoanswer`
 --
 
-INSERT INTO `opiniontoanswer` (`id`, `opinionId`, `userId`, `answer`) VALUES
-(1, 1, 2, 0),
-(2, 2, 2, 0);
+INSERT INTO `opiniontoanswer` (`id`, `date`, `opinionId`, `userId`, `answer`) VALUES
+(1, '0000-00-00', 1, 2, 0),
+(2, '0000-00-00', 2, 2, 1);
 
 -- --------------------------------------------------------
 

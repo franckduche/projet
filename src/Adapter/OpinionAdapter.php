@@ -6,8 +6,6 @@
 
 namespace TellMe\Adapter;
 
-use TellMe\Model\User;
-
 /**
  * Description of OpinionAdapter
  *
@@ -16,7 +14,6 @@ use TellMe\Model\User;
 class OpinionAdapter extends BaseAdapter {
     
     protected $tableName = 'opinion';
-    protected $opinionToAnswerTableName = 'opiniontoanswer';
     
     public function findById($id, $hydrate = false)
     {
@@ -39,13 +36,13 @@ class OpinionAdapter extends BaseAdapter {
         return $opinion;
     }
     
-    public function getOpinionListByUserId(User $user, $hydrate = false)
+    public function getOpinionListByUserId($userId, $hydrate = false)
     {
         $opinionList = array();
         
         $stmt = $this->conn->executeQuery(
                 'SELECT * FROM ' . $this->tableName . ' WHERE userId = ?',
-                array($user->getId()),
+                array($userId),
                 array(\PDO::PARAM_INT)
             );
         
@@ -60,33 +57,6 @@ class OpinionAdapter extends BaseAdapter {
             
             foreach ($opinionListCopy as $opinionId){
                 $opinionList[] = $this->findById($opinionId, $hydrate);
-            }
-        }
-        
-        return $opinionList;
-    }
-    
-    public function getOpinionToAnswerListByUserId(User $user, $hydrate = false)
-    {
-        $opinionList = array();
-        
-        $stmt = $this->conn->executeQuery(
-                'SELECT * FROM ' . $this->opinionToAnswerTableName . ' WHERE userId = ?',
-                array($user->getId()),
-                array(\PDO::PARAM_INT)
-            );
-        
-        while ($line = $stmt->fetch()) {
-            $opinionList[] = array($line['opinionId'], $line['answer']);
-        }
-
-        // Hydrate if necessary
-        if ($hydrate == 'full') {
-            $opinionListCopy = $opinionList;
-            $opinionList = array();
-            
-            foreach ($opinionListCopy as $opinionId){
-                $opinionList[] = array($this->findById($opinionId[0], $hydrate), $opinionId[1]);
             }
         }
         

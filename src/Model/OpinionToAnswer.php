@@ -18,12 +18,21 @@ class OpinionToAnswer {
     private $opinionId;
     private $answer;
     
+    private $opinion;
+    private $user;
+    
     function __construct($id = null, $date = null, $userId = null, $opinionId = null, $answer = null) {
         $this->id = $id;
         $this->date = $date;
         $this->userId = $userId;
         $this->opinionId = $opinionId;
         $this->answer = $answer;
+    }
+	
+    public static function fromArray(array $array = array())
+    {
+        return new self($array['id'], $array['date'], $array['userId'],
+                $array['opinionId'], $array['answer']);
     }
 
     public function getId() {
@@ -66,5 +75,19 @@ class OpinionToAnswer {
         $this->answer = $answer;
     }
 
+    public function getOpinion() {
+        return $this->opinion;
+    }
 
+    public function getUser() {
+        return $this->user;
+    }
+
+    public function setOpinion($opinion) {
+        $this->opinion = $opinion;
+    }
+
+    public function setUser($user) {
+        $this->user = $user;
+    }
 }
