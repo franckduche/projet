@@ -1,1 +1,22 @@
+Friends
+Opinions
+Profile
+<br/>
+<br/>
 
+{% for opinionToAnswer in opinionsToAnswer %}
+    {% if opinionToAnswer.answer is null %}
+        Not answered yet
+    {% else %}
+        Answered
+    {% endif %}
+        
+    Sent by : {{ opinionToAnswer.opinion.owner.nickname }}
+    
+    {{ constant('TYPE', opinionToAnswer.opinion) }}
+
+    <br/>
+    {% include 'opinion/' ~ constant('TYPE', opinionToAnswer.opinion) ~ '-view.twig'
+    with {'opinion': opinionToAnswer.opinion} %}
+    <br/>
+{% endfor %}

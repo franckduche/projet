@@ -35,7 +35,6 @@ class OpinionToAnswerAdapter extends BaseAdapter {
             );
         
         while ($line = $stmt->fetch()) {
-            //$opinionToAnswerList[] = array($line['opinionId'], $line['answer']);
             $opinionToAnswer = (new OpinionToAnswer)->fromArray($line);
             $opinionToAnswerList[] = $opinionToAnswer;
         }

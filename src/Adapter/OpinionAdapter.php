@@ -27,9 +27,14 @@ class OpinionAdapter extends BaseAdapter {
             $class = "TellMe\\Model\\".ucfirst($line['type']);
             $opinion = (new $class())->fromArray($line);
             if ($hydrate) {
+                // Filling with additionnal informations of subclass
                 $adapterClass = "TellMe\\Adapter\\".ucfirst($class::ADAPTER);
                 $adapter = new $adapterClass($this->conn);
                 $adapter->fill($opinion);
+                
+                // Setting the owner of the opinion
+                $userAdapter = new UserAdapter($this->conn);
+                $opinion->setOwner($userAdapter->findById($opinion->getUserId()));
             }
         }
         

@@ -1,0 +1,9 @@
+--- <br/>
+Date : {{ opinion.date }} <br/>
+Comment : {{ opinion.comment }} <br/>
+Pictures : <br/>
+{% for picture in opinion.pictureList %}
+* {{ picture.filepath }} {{ picture.filename }} <br/>
+Choose this one ? <br/>
+{% endfor %}
+--- <br/>
