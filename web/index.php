@@ -28,15 +28,23 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 /*
+ * Url generator
+ */
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+/*
  * Routes
  */
-$app->get('/', 'TellMe\Controller\OpinionController::toAnswerAction');
+$app->get('/', 'TellMe\Controller\OpinionController::toAnswerAction')
+        ->bind('homepage');
 
-$app->get('/test', 'TellMe\Controller\HelloController::testAction');
+$app->get('/test', 'TellMe\Controller\HelloController::testAction')
+        ->bind('test');
 
 $app->get('/hello', 'TellMe\Controller\HelloController::greetAllAction');
 
 $app->get('/hello/{nickname}', 'TellMe\Controller\HelloController::greetAction')
-    ->assert('name', '\w+');
+        ->assert('name', '\w+')
+        ->bind('hello');
 
 $app->run();
