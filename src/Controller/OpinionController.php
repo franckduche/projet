@@ -8,8 +8,6 @@ namespace TellMe\Controller;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use TellMe\Model\User;
-use TellMe\Adapter\UserAdapter;
 use TellMe\Adapter\OpinionAdapter;
 use TellMe\Adapter\OpinionToAnswerAdapter;
 

@@ -33,10 +33,37 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 /*
+ * Session provider
+ */
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+/*
+ * Translation provider
+ */
+$app->register(new Silex\Provider\TranslationServiceProvider(), array(
+    'locale_fallbacks' => array('en'),
+));
+
+/*
+ * Validation provider
+ */
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
+/*
+ * Form provider
+ */
+$app->register(new Silex\Provider\FormServiceProvider());
+
+/*
  * Routes
  */
 $app->get('/', 'TellMe\Controller\OpinionController::toAnswerAction')
         ->bind('homepage');
+
+$app->match('/login', 'TellMe\Controller\UserController::loginAction')
+        ->bind('login');
+
+
 
 $app->get('/test', 'TellMe\Controller\HelloController::testAction')
         ->bind('test');
