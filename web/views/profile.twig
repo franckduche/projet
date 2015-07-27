@@ -1,0 +1,15 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+<a href="{{ url('logout') }} ">Logout</a> <br/>
+
+Your nickname : {{ user.nickname }} <br/>
+Your friends : <br/>
+{% for friend in user.friendList %}
+    {{ friend.nickname }} <br/>
+{% else %}
+    No friends yet
+{% endfor %}
+
+{% endblock %}

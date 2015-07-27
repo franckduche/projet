@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <title>{% block title %}{% endblock %} - TellMe</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div>
+            <!-- main menu -->
+            <a href="{{ url('homepage') }} ">Home</a> |
+            Opinions |
+            <a href="{{ url('profile') }} ">Profile</a>
+            <br/>
+            <br/>
+        </div>
+        <div>
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

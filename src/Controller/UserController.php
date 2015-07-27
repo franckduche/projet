@@ -17,7 +17,7 @@ use TellMe\Adapter\UserAdapter;
  *
  * @author Francky
  */
-class UserController {
+class UserController extends BaseController {
     
     public function loginAction(Request $request, Application $app)
     {
@@ -59,5 +59,17 @@ class UserController {
     {
         $app['session']->set('user', null);
         return $app->redirect($app['url_generator']->generate('login'));
+    }
+    
+    public function profileAction(Request $request, Application $app)
+    {
+        if($this->isConnected($app)) {
+            $userAdapter = new UserAdapter($app['db']);
+            $userSession = $app['session']->get('user');
+            $user = $userAdapter->findById($userSession['id'], 'friendlist');
+            return $app['twig']->render('profile.twig', array('user' => $user));
+        } else {
+            return $app->redirect($app['url_generator']->generate('login'));
+        }
     }
 }

@@ -1,10 +1,6 @@
-{{ url('homepage') }} 
-{{ url('hello', {nickname: 'Franck'}) }}
-Friends
-Opinions
-Profile
-<br/>
-<br/>
+{% extends "base.twig" %}
+
+{% block content %}
 
 {% for opinionToAnswer in opinionsToAnswer %}
     {% if opinionToAnswer.answer is null %}
@@ -22,3 +18,5 @@ Profile
     with {'opinion': opinionToAnswer.opinion} %}
     <br/>
 {% endfor %}
+    
+{% endblock %}

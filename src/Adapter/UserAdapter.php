@@ -57,7 +57,10 @@ class UserAdapter extends BaseAdapter {
         
         if ($line = $stmt->fetch()) {
             $user = (new User)->fromArray($line);
-            if ($hydrate) {
+            if ($hydrate == 'friendlist') {
+                $user->setFriendList($this->getFriendList($user, $hydrate));
+            }
+            elseif ($hydrate) {
                 $user->setFriendList($this->getFriendList($user, $hydrate));
                 $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user->getId(), $hydrate));
                 $user->setOpinionToAnswerList($this->opinionToAnswerAdapter->getOpinionToAnswerListByUserId($user->getId(), $hydrate));
@@ -96,7 +99,7 @@ class UserAdapter extends BaseAdapter {
         asort($friendIdList);
         
         // Hydrate if necessary
-        if ($hydrate == 'full') {
+        if ($hydrate == 'full' || $hydrate == 'friendlist') {
             $friendIdListCopy = $friendIdList;
             $friendIdList = array();
             
