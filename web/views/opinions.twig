@@ -1,0 +1,12 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+<a href="{{ url('opinions') }} ">Add new one</a> <br/>
+
+{% for opinion in opinions %}
+    {% include 'opinion/' ~ constant('TYPE', opinion) ~ '-view.twig' %}
+{% else %}
+{% endfor %}
+
+{% endblock %}

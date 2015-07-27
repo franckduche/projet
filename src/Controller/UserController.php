@@ -26,7 +26,7 @@ class UserController extends BaseController {
             ->add('nickname', 'text', array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))
             ))
-            ->add('password', 'text', array(
+            ->add('password', 'password', array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))
             ))
             ->getForm();

@@ -75,7 +75,8 @@ $app->get('/logout', 'TellMe\Controller\UserController::logoutAction')
 $app->get('/profile', 'TellMe\Controller\UserController::profileAction')
         ->bind('profile');
 
-
+$app->get('/opinions', 'TellMe\Controller\OpinionController::myOpinionsAction')
+        ->bind('opinions');
 
 
 
