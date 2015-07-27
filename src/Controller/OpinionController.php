@@ -16,18 +16,21 @@ use TellMe\Adapter\OpinionToAnswerAdapter;
  *
  * @author Francky
  */
-class OpinionController {
+class OpinionController extends BaseController {
     
     public function toAnswerAction(Request $request, Application $app)
     {
-        // @TODO add subscription and login
-        $userId = 2;
-        
-        $opinionAdapter = new OpinionAdapter($app['db']);
-        $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db'], $opinionAdapter);
+        if($this->isConnected($app)) {
+            $userId = 2;
 
-        return $app['twig']->render('opinions-to-answer.twig', array(
-            'opinionsToAnswer' => $opinionToAnswerAdapter->getOpinionToAnswerListByUserId($userId, 'full'),
-        ));
+            $opinionAdapter = new OpinionAdapter($app['db']);
+            $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db'], $opinionAdapter);
+
+            return $app['twig']->render('opinions-to-answer.twig', array(
+                'opinionsToAnswer' => $opinionToAnswerAdapter->getOpinionToAnswerListByUserId($userId, 'full'),
+            ));
+        } else {
+            return $app->redirect($app['url_generator']->generate('login'));
+        }
     }
 }

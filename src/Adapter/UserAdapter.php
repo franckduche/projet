@@ -47,6 +47,8 @@ class UserAdapter extends BaseAdapter {
     
     public function findById($id, $hydrate = false)
     {
+        $user = null;
+        
         $stmt = $this->conn->executeQuery(
                 'SELECT * FROM ' . $this->tableName . ' WHERE id = ?',
                 array($id),
@@ -104,5 +106,27 @@ class UserAdapter extends BaseAdapter {
         }
         
         return $friendIdList;
+    }
+    
+    public function findByNickname($nickname, $hydrate = null)
+    {
+        $user = null;
+        
+        $stmt = $this->conn->executeQuery(
+                'SELECT * FROM ' . $this->tableName . ' WHERE nickname = ?',
+                array($nickname),
+                array(\PDO::PARAM_STR)
+            );
+        
+        if ($line = $stmt->fetch()) {
+            $user = (new User)->fromArray($line);
+            if ($hydrate) {
+                $user->setFriendList($this->getFriendList($user, $hydrate));
+                $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user->getId(), $hydrate));
+                $user->setOpinionToAnswerList($this->opinionToAnswerAdapter->getOpinionToAnswerListByUserId($user->getId(), $hydrate));
+            }
+        }
+        
+        return $user;
     }
 }

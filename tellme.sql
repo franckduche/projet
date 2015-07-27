@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Sam 25 Juillet 2015 à 15:13
+-- Généré le :  Lun 27 Juillet 2015 à 14:17
 -- Version du serveur :  5.6.17
 -- Version de PHP :  5.5.12
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `opinion` (
   `type` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `opinion`
@@ -85,7 +85,8 @@ CREATE TABLE IF NOT EXISTS `opinion` (
 
 INSERT INTO `opinion` (`id`, `userId`, `date`, `comment`, `type`) VALUES
 (1, 1, '2015-07-23', 'aoaoaoaoaoaoaoaoaoo', 'poll'),
-(2, 1, '2015-07-23', 'oeoeoeoeoeoeoeoeoeoe', 'choice');
+(2, 1, '2015-07-23', 'oeoeoeoeoeoeoeoeoeoe', 'choice'),
+(3, 3, '2015-07-25', 'super comment', 'choice');
 
 -- --------------------------------------------------------
 
@@ -98,11 +99,11 @@ CREATE TABLE IF NOT EXISTS `opiniontoanswer` (
   `date` date NOT NULL,
   `opinionId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
-  `answer` int(11) NOT NULL,
+  `answer` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `opinionId` (`opinionId`),
   KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `opiniontoanswer`
@@ -110,7 +111,8 @@ CREATE TABLE IF NOT EXISTS `opiniontoanswer` (
 
 INSERT INTO `opiniontoanswer` (`id`, `date`, `opinionId`, `userId`, `answer`) VALUES
 (1, '0000-00-00', 1, 2, 0),
-(2, '0000-00-00', 2, 2, 1);
+(2, '0000-00-00', 2, 2, 1),
+(3, '0000-00-00', 3, 2, NULL);
 
 -- --------------------------------------------------------
 
@@ -168,7 +170,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `nickname` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `phoneNumber` (`phoneNumber`)
+  UNIQUE KEY `phoneNumber` (`phoneNumber`),
+  UNIQUE KEY `nickname` (`nickname`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --

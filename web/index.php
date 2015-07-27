@@ -36,6 +36,9 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
  * Session provider
  */
 $app->register(new Silex\Provider\SessionServiceProvider());
+$app['session.storage.options'] = array (
+    'cookie_lifetime' => 31500000
+);
 
 /*
  * Translation provider
@@ -62,6 +65,9 @@ $app->get('/', 'TellMe\Controller\OpinionController::toAnswerAction')
 
 $app->match('/login', 'TellMe\Controller\UserController::loginAction')
         ->bind('login');
+
+$app->match('/logout', 'TellMe\Controller\UserController::logoutAction')
+        ->bind('logout');
 
 
 

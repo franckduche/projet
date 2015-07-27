@@ -9,6 +9,7 @@ namespace TellMe\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
+use TellMe\Adapter\UserAdapter;
 
 
 /**
@@ -20,7 +21,7 @@ class UserController {
     
     public function loginAction(Request $request, Application $app)
     {
-
+        // Form creation
         $form = $app['form.factory']->createBuilder('form')
             ->add('nickname', 'text', array(
                 'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))
@@ -32,16 +33,31 @@ class UserController {
 
         $form->handleRequest($request);
 
+        // Form handling
         if ($form->isValid()) {
             $data = $form->getData();
+            
+            $userAdapter = new UserAdapter($app['db']);
+            $user = $userAdapter->findByNickname($data['nickname']);
+            
+            // Check data
+            if ($user == null || $data['password'] != $user->getPassword()) {
+                return $app['twig']->render('login.twig', array('form' => $form->createView()));
+            } else {
+                $app['session']->set('user', array('id' => $user->getId(), 'nickname' => $user->getNickname()));
 
-            // do something with the data
-
-            // redirect somewhere
-            return $app->redirect($app['url_generator']->generate('homepage'));
+                // redirect to homepage
+                return $app->redirect($app['url_generator']->generate('homepage'));
+            }
         }
 
         // display the form
         return $app['twig']->render('login.twig', array('form' => $form->createView()));
+    }
+    
+    public function logoutAction(Request $request, Application $app)
+    {
+        $app['session']->set('user', null);
+        return $app->redirect($app['url_generator']->generate('login'));
     }
 }
