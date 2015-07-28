@@ -2,7 +2,13 @@
 
 {% block content %}
 
-<a href="{{ url('opinions') }} ">Add new one</a> <br/>
+<form  id="add-opinion" onsubmit="window.location=$('#opinion-selected').val(); return false;">
+    <select id="opinion-selected" >
+        <option value="{{ url('poll') }}">Poll</option>
+        <option value="{{ url('choice') }}">Choice</option>
+     </select>
+    <input type="submit" value="Add new one"/>
+</form>
 
 {% for opinion in opinions %}
     {% include 'opinion/' ~ constant('TYPE', opinion) ~ '-view.twig' %}

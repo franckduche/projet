@@ -81,6 +81,12 @@ $app->get('/profile', 'TellMe\Controller\UserController::profileAction')
 $app->get('/opinions', 'TellMe\Controller\OpinionController::myOpinionsAction')
         ->bind('opinions');
 
+$app->match('/poll', 'TellMe\Controller\OpinionController::pollAction')
+        ->bind('poll');
+
+$app->match('/choice', 'TellMe\Controller\OpinionController::choiceAction')
+        ->bind('choice');
+
 
 
 
