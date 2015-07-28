@@ -17,6 +17,8 @@
     {% include 'opinion/' ~ constant('TYPE', opinionToAnswer.opinion) ~ '-view.twig'
     with {'opinion': opinionToAnswer.opinion} %}
     <br/>
+{% else %}
+    No opinions to answer
 {% endfor %}
     
 {% endblock %}

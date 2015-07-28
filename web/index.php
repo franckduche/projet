@@ -66,6 +66,9 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->get('/', 'TellMe\Controller\OpinionController::toAnswerAction')
         ->bind('homepage');
 
+$app->match('/register', 'TellMe\Controller\UserController::registerAction')
+        ->bind('register');
+
 $app->match('/login', 'TellMe\Controller\UserController::loginAction')
         ->bind('login');
 

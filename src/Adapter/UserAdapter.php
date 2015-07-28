@@ -132,4 +132,15 @@ class UserAdapter extends BaseAdapter {
         
         return $user;
     }
+    
+    public function create($data)
+    {
+        $this->conn->insert($this->tableName, $data);
+        
+        $userId = $this->conn->lastInsertId();
+        
+        $user = $this->findById($userId);
+        
+        return $user;
+    }
 }
