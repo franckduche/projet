@@ -35,7 +35,7 @@ class UserAdapter extends BaseAdapter {
         while ($line = $stmt->fetch()) {
             $user = (new User)->fromArray($line);
             if ($hydrate) {
-                $user->setFriendList($this->getFriendList($user, $hydrate));
+                $user->setFriendList($this->getFriendList($user->getId(), $hydrate));
                 $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user->getId(), $hydrate));
                 $user->setOpinionToAnswerList($this->opinionToAnswerAdapter->getOpinionToAnswerListByUserId($user->getId(), $hydrate));
             }
@@ -58,10 +58,10 @@ class UserAdapter extends BaseAdapter {
         if ($line = $stmt->fetch()) {
             $user = (new User)->fromArray($line);
             if ($hydrate == 'friendlist') {
-                $user->setFriendList($this->getFriendList($user, $hydrate));
+                $user->setFriendList($this->getFriendList($user->getId(), $hydrate));
             }
             elseif ($hydrate) {
-                $user->setFriendList($this->getFriendList($user, $hydrate));
+                $user->setFriendList($this->getFriendList($user->getId(), $hydrate));
                 $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user->getId(), $hydrate));
                 $user->setOpinionToAnswerList($this->opinionToAnswerAdapter->getOpinionToAnswerListByUserId($user->getId(), $hydrate));
             }
@@ -70,14 +70,14 @@ class UserAdapter extends BaseAdapter {
         return $user;
     }
     
-    public function getFriendList(User $user, $hydrate = false)
+    public function getFriendList($userId, $hydrate = false)
     {
         $friendIdList = array();
 
         // Get in first order
         $stmt1 = $this->conn->executeQuery(
                 'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId1 = ?',
-                array($user->getId()),
+                array($userId),
                 array(\PDO::PARAM_INT)
             );
         
@@ -88,7 +88,7 @@ class UserAdapter extends BaseAdapter {
         // Get in second order
         $stmt2 = $this->conn->executeQuery(
                 'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId2 = ?',
-                array($user->getId()),
+                array($userId),
                 array(\PDO::PARAM_INT)
             );
         
@@ -124,7 +124,7 @@ class UserAdapter extends BaseAdapter {
         if ($line = $stmt->fetch()) {
             $user = (new User)->fromArray($line);
             if ($hydrate) {
-                $user->setFriendList($this->getFriendList($user, $hydrate));
+                $user->setFriendList($this->getFriendList($user->getId(), $hydrate));
                 $user->setOpinionList($this->opinionAdapter->getOpinionListByUserId($user->getId(), $hydrate));
                 $user->setOpinionToAnswerList($this->opinionToAnswerAdapter->getOpinionToAnswerListByUserId($user->getId(), $hydrate));
             }

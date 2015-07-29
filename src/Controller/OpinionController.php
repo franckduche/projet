@@ -9,8 +9,13 @@ namespace TellMe\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
+use TellMe\Adapter\UserAdapter;
 use TellMe\Adapter\OpinionAdapter;
 use TellMe\Adapter\OpinionToAnswerAdapter;
+use TellMe\Adapter\PollAdapter;
+use TellMe\Adapter\PictureAdapter;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use TellMe\Model\Poll;
 
 /**
  * Description of OpinionController
@@ -55,6 +60,15 @@ class OpinionController extends BaseController {
     public function pollAction(Request $request, Application $app)
     {
         if($this->isConnected($app)) {
+            // Get friends
+            $user = $app['session']->get('user');
+            $userAdapter = new UserAdapter($app['db']);
+            $friendList = $userAdapter->getFriendList($user['id'], 'full');
+            $friends = array();
+            foreach($friendList as $friend) {
+                $friends[$friend->getId()] = $friend->getNickname();
+            }
+            
             // Form creation
             $form = $app['form.factory']->createBuilder('form')
                 ->add('comment', 'text', array(
@@ -63,6 +77,11 @@ class OpinionController extends BaseController {
                 ->add('file', 'file', array(
                     'constraints' => array(new Assert\Image())
                 ))
+                ->add('friends', 'choice', array(
+                    'choices' => $friends,
+                    'multiple' => true,
+                    'expanded' => true
+                ))
                 ->getForm();
 
             $form->handleRequest($request);
@@ -70,19 +89,51 @@ class OpinionController extends BaseController {
             // Form handling
             if ($form->isValid()) {
                 $data = $form->getData();
-
-                $userAdapter = new OpinionAdapter($app['db']);
-
-                // Check data
-                if (false) {
-                    return $app['twig']->render('opinion/poll-add-form.twig', array('form' => $form->createView()));
-                } else {
-                    // add opinion
-                    
-                    
-                    // redirect to opinions
-                    return $app->redirect($app['url_generator']->generate('opinions'));
+                
+                // File handling
+                $file = $data['file'];
+                $filepath = uniqid(). '.' .$file->getClientOriginalExtension();
+                try {
+                    $file->move(__DIR__.'/../../web/pictures', $filepath); 
+                } catch(FileException $e) {
+                    $filepath = null;
                 }
+
+                // Create opinion
+                $formatedData = array(
+                    'userId' => $user['id'],
+                    'date' => date('Y-m-d'),
+                    'comment' => $data['comment'],
+                    'type' => Poll::TYPE
+                );
+                $opinionAdapter = new OpinionAdapter($app['db']);
+                $opinionId = $opinionAdapter->create($formatedData);
+                
+                // Create poll
+                $pollAdapter = new PollAdapter($app['db']);
+                $pollAdapter->create(array(
+                    'opinionId' => $opinionId
+                ));
+                
+                // Create picture
+                $pictureData = array(
+                    'filename' => $file->getClientOriginalName(),
+                    'filepath' => $filepath,
+                    'opinionId' => $opinionId
+                );
+                $pictureAdapter = new PictureAdapter($app['db']);
+                $pictureAdapter->create($pictureData);
+                
+                // Create opinionToAnswer
+                $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db']);
+                foreach($data['friends'] as $friendId) {
+                    $opinionToAnswerAdapter->create(array(
+                        'userId' => $friendId,
+                        'opinionId' => $opinionId
+                    ));
+                }
+                
+                return $app->redirect($app['url_generator']->generate('opinions'));
             }
 
             // display the form

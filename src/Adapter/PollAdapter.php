@@ -16,6 +16,7 @@ use TellMe\Model\Picture;
  */
 class PollAdapter extends BaseAdapter {
     
+    protected $tableName = 'poll';
     protected $pictureTableName = 'picture';
 
     public function fill(Poll &$poll)
@@ -30,5 +31,12 @@ class PollAdapter extends BaseAdapter {
             $picture = (new Picture)->fromArray($line);
             $poll->setPicture($picture);
         }
+    }
+    
+    public function create($data)
+    {
+        $this->conn->insert($this->tableName, $data);
+        
+        return $this->conn->lastInsertId();
     }
 }

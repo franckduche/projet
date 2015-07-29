@@ -67,4 +67,11 @@ class OpinionAdapter extends BaseAdapter {
         
         return $opinionList;
     }
+    
+    public function create($data)
+    {
+        $this->conn->insert($this->tableName, $data);
+        
+        return $this->conn->lastInsertId();
+    }
 }
