@@ -2,8 +2,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use TellMe\Model\User;
-
 $app = new Silex\Application();
 $app['debug'] = true;
 
@@ -17,6 +15,10 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'dbname' => 'tellme',
         'user' => 'root',
         'password' => '',
+        /*'dbhost' => 'sql2.olympe.in',
+        'dbname' => 'zonzlhno',
+        'user' => 'zonzlhno',
+        'password' => 'franck',*/
     ),
 ));
 
