@@ -11,7 +11,7 @@
 </form>
 
 {% for opinion in opinions %}
-    {% include 'opinion/' ~ constant('TYPE', opinion) ~ '-view.twig' %}
+    {% include 'opinion/my-' ~ constant('TYPE', opinion) ~ '-view.twig' with { 'loopIndex': loop.index0} %}
 {% else %}
 {% endfor %}
 

@@ -55,4 +55,22 @@ class OpinionToAnswerAdapter extends BaseAdapter {
         
         return $this->conn->lastInsertId();
     }
+    
+    public function findByOpinionId($opinionId)
+    {
+        $opinionToAnswerList = array();
+        
+        $stmt = $this->conn->executeQuery(
+                'SELECT * FROM ' . $this->tableName . ' WHERE opinionId = ?',
+                array($opinionId),
+                array(\PDO::PARAM_INT)
+            );
+        
+        while ($line = $stmt->fetch()) {
+            $opinionToAnswer = (new OpinionToAnswer)->fromArray($line);
+            $opinionToAnswerList[] = $opinionToAnswer;
+        }
+        
+        return $opinionToAnswerList;
+    }
 }

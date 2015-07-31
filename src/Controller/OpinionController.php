@@ -49,8 +49,27 @@ class OpinionController extends BaseController {
             
             $opinionAdapter = new OpinionAdapter($app['db']);
             
+            $opinions = $opinionAdapter->getOpinionListByUserId($userId, 'full');
+            
+            $opinionsAnswers = array();
+            foreach($opinions as $opinion) {
+                $opinionAnswers = array('total' => 0);
+                $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db']);
+                $opinionToAnswerList = $opinionToAnswerAdapter->findByOpinionId($opinion->getId());
+                foreach($opinionToAnswerList as $opinionToAnswer) {
+                    $opinionAnswers['total']++;
+                    if(array_key_exists($opinionToAnswer->getAnswer(), $opinionAnswers)) {
+                        $opinionAnswers[$opinionToAnswer->getAnswer()]++;
+                    } else {
+                        $opinionAnswers[$opinionToAnswer->getAnswer()] = 1;
+                    }
+                }
+                $opinionsAnswers[] = $opinionAnswers;
+            }
+            
             return $app['twig']->render('opinions.twig', array(
-                'opinions' => $opinionAdapter->getOpinionListByUserId($userId, 'full'),
+                'opinions' => $opinions,
+                'opinionsAnswers' =>$opinionsAnswers
             ));
         } else {
             return $app->redirect($app['url_generator']->generate('login'));
