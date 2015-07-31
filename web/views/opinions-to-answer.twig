@@ -2,16 +2,22 @@
 
 {% block content %}
 
+{% for message in app.session.getFlashBag.get('message') %}
+    {{ message }} <br/>
+{% endfor %}
+
 {% for opinionToAnswer in opinionsToAnswer %}
-    {% if opinionToAnswer.answer is null %}
-        Not answered yet
-    {% else %}
-        Answered
-    {% endif %}
-        
-    Sent by : {{ opinionToAnswer.opinion.owner.nickname }}
-    
-    {{ constant('TYPE', opinionToAnswer.opinion) }}
+    <strong>
+        {% if opinionToAnswer.answer is null %}
+            Not answered yet
+        {% else %}
+            Answered
+        {% endif %}
+        |
+        Sent by : {{ opinionToAnswer.opinion.owner.nickname }}
+        |
+        {{ constant('TYPE', opinionToAnswer.opinion) }}
+    </strong>
 
     <br/>
     {% include 'opinion/' ~ constant('TYPE', opinionToAnswer.opinion) ~ '-view.twig'

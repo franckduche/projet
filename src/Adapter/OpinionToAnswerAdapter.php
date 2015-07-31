@@ -73,4 +73,13 @@ class OpinionToAnswerAdapter extends BaseAdapter {
         
         return $opinionToAnswerList;
     }
+    
+    public function answer($id, $answer)
+    {
+        $this->conn->update(
+            $this->tableName,
+            array('answer' => $answer),
+            array('id' => $id)
+        );
+    }
 }

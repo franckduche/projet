@@ -91,6 +91,11 @@ $app->get('/opinions', 'TellMe\Controller\OpinionController::myOpinionsAction')
 $app->match('/poll', 'TellMe\Controller\OpinionController::pollAction')
         ->bind('poll');
 
+$app->get('/answer/{opinionAnswerId}/{answer}', 'TellMe\Controller\OpinionController::answerAction')
+        ->assert('opinionAnswerId', '\d+')
+        ->assert('answer', '\d+')
+        ->bind('answer');
+
 $app->match('/choice', 'TellMe\Controller\OpinionController::choiceAction')
         ->bind('choice');
 

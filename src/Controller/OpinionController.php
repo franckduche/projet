@@ -170,4 +170,16 @@ class OpinionController extends BaseController {
             return $app->redirect($app['url_generator']->generate('login'));
         }
     }
+    
+    public function answerAction(Request $request, Application $app, $opinionAnswerId, $answer)
+    {
+        if($this->isConnected($app)) {
+            $app['session']->getFlashBag()->add('message', 'Opinion answered');
+            $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db']);
+            $opinionToAnswerAdapter->answer($opinionAnswerId, $answer);
+            return $app->redirect($app['url_generator']->generate('homepage'));
+        } else {
+            return $app->redirect($app['url_generator']->generate('login'));
+        }
+    }
 }
