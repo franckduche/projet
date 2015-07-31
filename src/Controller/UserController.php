@@ -68,15 +68,38 @@ class UserController extends BaseController {
     public function profileAction(Request $request, Application $app)
     {
         if($this->isConnected($app)) {
+            
             $userAdapter = new UserAdapter($app['db']);
             $userSession = $app['session']->get('user');
+            
+            // Add friend form
+            $form = $app['form.factory']->createBuilder('form')
+                ->add('nickname', 'text', array(
+                    'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 5)))
+                ))
+                ->getForm();
+
+            $form->handleRequest($request);
+            
+            // Form handling
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $userToAdd = $userAdapter->findByNickname($data['nickname']);
+                $app['session']->getFlashBag()->add('message', $userToAdd ? 'Friend request sent' : 'Nickname not found');
+                if ($userToAdd != null) {
+                    $userAdapter->createFriendship($userSession['id'], $userToAdd->getId());
+                }
+            }
+              
             $user = $userAdapter->findById($userSession['id'], 'friendlist');
             $pendingFriends = $userAdapter->getFriendRequestedList($userSession['id'], 'friendlist');
             $friendsToAccept = $userAdapter->getFriendToAcceptList($userSession['id'], 'friendlist');
+            
             return $app['twig']->render('profile.twig', array(
                 'user' => $user,
                 'pendingFriends' => $pendingFriends,
-                'friendsToAccept' => $friendsToAccept
+                'friendsToAccept' => $friendsToAccept,
+                'form' => $form->createView()
             ));
         } else {
             return $app->redirect($app['url_generator']->generate('login'));

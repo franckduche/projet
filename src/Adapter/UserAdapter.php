@@ -208,4 +208,38 @@ class UserAdapter extends BaseAdapter {
             array('userId1' => $userId1, 'userId2' => $userId2)
         );
     }
+    
+    public function createFriendship($userId1, $userId2)
+    {
+        $relationShipAlreadyExists = false;
+        
+        // Check if already exists in first order
+        $stmt1 = $this->conn->executeQuery(
+                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId1 = ? AND userId2 = ?',
+                array($userId1, $userId2),
+                array(\PDO::PARAM_INT, \PDO::PARAM_INT)
+            );
+        
+        if ($line = $stmt1->fetch()) {
+            $relationShipAlreadyExists = true;
+        }
+        
+        // Check if already exists in second order
+        $stmt2 = $this->conn->executeQuery(
+                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId2 = ? AND userId1 = ?',
+                array($userId1, $userId2),
+                array(\PDO::PARAM_INT, \PDO::PARAM_INT)
+            );
+        
+        if ($line = $stmt2->fetch()) {
+            $relationShipAlreadyExists = true;
+        }
+        
+        if (!$relationShipAlreadyExists) {
+            $this->conn->insert($this->FriendListTableName, array(
+                'userId1' => $userId1,
+                'userId2' => $userId2
+            ));
+        }
+    }
 }

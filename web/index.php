@@ -77,7 +77,7 @@ $app->match('/login', 'TellMe\Controller\UserController::loginAction')
 $app->get('/logout', 'TellMe\Controller\UserController::logoutAction')
         ->bind('logout');
 
-$app->get('/profile', 'TellMe\Controller\UserController::profileAction')
+$app->match('/profile', 'TellMe\Controller\UserController::profileAction')
         ->bind('profile');
 
 $app->get('/friend/{userId1}/{accepted}', 'TellMe\Controller\UserController::acceptFriendAction')

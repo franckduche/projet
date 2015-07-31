@@ -8,22 +8,22 @@
 
 <a href="{{ url('logout') }} ">Logout</a> <br/>
 
-Your nickname : {{ user.nickname }} <br/>
-Your friends : <br/>
+<strong>Your nickname</strong> : {{ user.nickname }} <br/>
+<strong>Your friends</strong> : <br/>
 {% for friend in user.friendList %}
     {{ friend.nickname }} <br/>
 {% else %}
     No friends yet <br/>
 {% endfor %}
     
-Pending requests : <br/>
+<strong>Pending requests</strong> : <br/>
 {% for pendingFriend in pendingFriends %}
     {{ pendingFriend.nickname }} <br/>
 {% else %}
     No pending friends request <br/>
 {% endfor %}
     
-Friends to accept : <br/>
+<strong>Friends to accept</strong> : <br/>
 {% for friendToAccept in friendsToAccept %}
     {{ friendToAccept.nickname }} <br/>
     <a href="{{ url('accept_friend', {'userId1':friendToAccept.id, 'accepted':1}) }} ">Accept</a> |
@@ -31,5 +31,13 @@ Friends to accept : <br/>
 {% else %}
     No friends to accept <br/>
 {% endfor %}
+    
+<br/>
+    
+<form action="#" method="post">
+    {{ form_widget(form) }}
+
+    <input type="submit" name="submit" />
+</form>
 
 {% endblock %}
