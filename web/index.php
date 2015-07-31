@@ -80,6 +80,11 @@ $app->get('/logout', 'TellMe\Controller\UserController::logoutAction')
 $app->get('/profile', 'TellMe\Controller\UserController::profileAction')
         ->bind('profile');
 
+$app->get('/friend/{userId1}/{accepted}', 'TellMe\Controller\UserController::acceptFriendAction')
+        ->assert('userId1', '\d+')
+        ->assert('accepted', '\d+')
+        ->bind('accept_friend');
+
 $app->get('/opinions', 'TellMe\Controller\OpinionController::myOpinionsAction')
         ->bind('opinions');
 

@@ -71,7 +71,13 @@ class UserController extends BaseController {
             $userAdapter = new UserAdapter($app['db']);
             $userSession = $app['session']->get('user');
             $user = $userAdapter->findById($userSession['id'], 'friendlist');
-            return $app['twig']->render('profile.twig', array('user' => $user));
+            $pendingFriends = $userAdapter->getFriendRequestedList($userSession['id'], 'friendlist');
+            $friendsToAccept = $userAdapter->getFriendToAcceptList($userSession['id'], 'friendlist');
+            return $app['twig']->render('profile.twig', array(
+                'user' => $user,
+                'pendingFriends' => $pendingFriends,
+                'friendsToAccept' => $friendsToAccept
+            ));
         } else {
             return $app->redirect($app['url_generator']->generate('login'));
         }
@@ -124,6 +130,19 @@ class UserController extends BaseController {
             return $app['twig']->render('register.twig', array('form' => $form->createView()));
         } else {
             return $app->redirect($app['url_generator']->generate('homepage'));
+        }
+    }
+    
+    public function acceptFriendAction(Request $request, Application $app, $userId1, $accepted)
+    {
+        if($this->isConnected($app)) {
+            $app['session']->getFlashBag()->add('message', $accepted ? 'Friend accepted' : 'Friend request declined');
+            $userAdapter = new UserAdapter($app['db']);
+            $userSession = $app['session']->get('user');
+            $userAdapter->acceptFriend($userId1, $userSession['id'], $accepted);
+            return $app->redirect($app['url_generator']->generate('profile'));
+        } else {
+            return $app->redirect($app['url_generator']->generate('login'));
         }
     }
 }

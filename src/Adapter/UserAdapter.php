@@ -76,7 +76,7 @@ class UserAdapter extends BaseAdapter {
 
         // Get in first order
         $stmt1 = $this->conn->executeQuery(
-                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId1 = ?',
+                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId1 = ? AND accepted = 1',
                 array($userId),
                 array(\PDO::PARAM_INT)
             );
@@ -87,7 +87,7 @@ class UserAdapter extends BaseAdapter {
         
         // Get in second order
         $stmt2 = $this->conn->executeQuery(
-                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId2 = ?',
+                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId2 = ? AND accepted = 1',
                 array($userId),
                 array(\PDO::PARAM_INT)
             );
@@ -142,5 +142,70 @@ class UserAdapter extends BaseAdapter {
         $user = $this->findById($userId);
         
         return $user;
+    }
+    
+    public function getFriendRequestedList($userId, $hydrate = false)
+    {
+        $friendIdList = array();
+
+        // Get lines where not accepted
+        $stmt = $this->conn->executeQuery(
+                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId1 = ? AND accepted IS NULL',
+                array($userId),
+                array(\PDO::PARAM_INT)
+            );
+        
+        while ($line = $stmt->fetch()) {
+            $friendIdList[] = $line['userId2'];
+        }
+        
+        // Hydrate if necessary
+        if ($hydrate == 'full' || $hydrate == 'friendlist') {
+            $friendIdListCopy = $friendIdList;
+            $friendIdList = array();
+            
+            foreach ($friendIdListCopy as $friendId){
+                $friendIdList[] = $this->findById($friendId);
+            }
+        }
+        
+        return $friendIdList;
+    }
+    
+    public function getFriendToAcceptList($userId, $hydrate = false)
+    {
+        $friendIdList = array();
+
+        // Get lines where not accepted
+        $stmt = $this->conn->executeQuery(
+                'SELECT * FROM ' . $this->FriendListTableName . ' WHERE userId2 = ? AND accepted IS NULL',
+                array($userId),
+                array(\PDO::PARAM_INT)
+            );
+        
+        while ($line = $stmt->fetch()) {
+            $friendIdList[] = $line['userId1'];
+        }
+        
+        // Hydrate if necessary
+        if ($hydrate == 'full' || $hydrate == 'friendlist') {
+            $friendIdListCopy = $friendIdList;
+            $friendIdList = array();
+            
+            foreach ($friendIdListCopy as $friendId){
+                $friendIdList[] = $this->findById($friendId);
+            }
+        }
+        
+        return $friendIdList;
+    }
+    
+    public function acceptFriend($userId1, $userId2, $accepted)
+    {
+        $this->conn->update(
+            $this->FriendListTableName,
+            array('accepted' => $accepted),
+            array('userId1' => $userId1, 'userId2' => $userId2)
+        );
     }
 }

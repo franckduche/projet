@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% for message in app.session.getFlashBag.get('message') %}
+    {{ message }} <br/>
+{% endfor %}
+
 <a href="{{ url('logout') }} ">Logout</a> <br/>
 
 Your nickname : {{ user.nickname }} <br/>
@@ -9,7 +13,23 @@ Your friends : <br/>
 {% for friend in user.friendList %}
     {{ friend.nickname }} <br/>
 {% else %}
-    No friends yet
+    No friends yet <br/>
+{% endfor %}
+    
+Pending requests : <br/>
+{% for pendingFriend in pendingFriends %}
+    {{ pendingFriend.nickname }} <br/>
+{% else %}
+    No pending friends request <br/>
+{% endfor %}
+    
+Friends to accept : <br/>
+{% for friendToAccept in friendsToAccept %}
+    {{ friendToAccept.nickname }} <br/>
+    <a href="{{ url('accept_friend', {'userId1':friendToAccept.id, 'accepted':1}) }} ">Accept</a> |
+    <a href="{{ url('accept_friend', {'userId1':friendToAccept.id, 'accepted':0}) }} ">Decline</a> <br/>
+{% else %}
+    No friends to accept <br/>
 {% endfor %}
 
 {% endblock %}
