@@ -11,11 +11,11 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver' => 'pdo_mysql',
-        'dbhost' => 'localhost',
+        'host' => 'localhost',
         'dbname' => 'tellme',
         'user' => 'root',
         'password' => '',
-        /*'dbhost' => 'sql2.olympe.in',
+        /*'host' => 'sql2.olympe.in',
         'dbname' => 'zonzlhno',
         'user' => 'zonzlhno',
         'password' => 'franck',*/
