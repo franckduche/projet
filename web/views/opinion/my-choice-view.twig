@@ -1,9 +1,13 @@
 --- <br/>
 Date : {{ opinion.date }} <br/>
 Comment : {{ opinion.comment }} <br/>
+Sent to {{ opinionsAnswers[loopIndex].total }} friends <br/>
 Pictures : <br/>
 {% for picture in opinion.pictureList %}
-* Picture : <img src="{{ app.request.basepath }}/pictures/{{ picture.filepath }}" width="100" /> <br/>
-Choose this one ? <br/>
+    <img src="{{ app.request.basepath }}/pictures/{{ picture.filepath }}" width="100" />
+    {% if opinionsAnswers[loopIndex][picture.id] is defined %}
+        Chosen {{ opinionsAnswers[loopIndex][picture.id] }} time(s)
+    {% endif %}
+     <br/>
 {% endfor %}
 --- <br/>

@@ -3,7 +3,12 @@ Date : {{ opinion.date }} <br/>
 Comment : {{ opinion.comment }} <br/>
 Pictures : <br/>
 {% for picture in opinion.pictureList %}
-* Picture : <img src="{{ app.request.basepath }}/pictures/{{ opinion.picture.filepath }}" width="100" /> <br/>
-Choose this one ? <br/>
+    <img src="{{ app.request.basepath }}/pictures/{{ picture.filepath }}" width="100" />
+    {% if opinionToAnswer.answer is null %}
+        <a href="{{ url('answer', {'opinionAnswerId':opinionToAnswer.id, 'answer':picture.id}) }} ">Choose this one ?</a>
+    {% elseif opinionToAnswer.answer == picture.id %}
+        You successfully chose this one :)
+    {% endif %}
+     <br/>
 {% endfor %}
 --- <br/>
