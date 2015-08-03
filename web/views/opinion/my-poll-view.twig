@@ -1,9 +1,9 @@
 --- <br/>
 Date : {{ opinion.date }} <br/>
 Comment : {{ opinion.comment }} <br/>
-Picture : <img src="{{ app.request.basepath }}/pictures/{{ opinion.picture.filepath }}" width="50" /> <br/>
+Picture : <img src="{{ app.request.basepath }}/pictures/{{ opinion.picture.filepath }}" width="100" /> <br/>
 Sent to {{ opinionsAnswers[loopIndex].total }} friends <br/>
-{% if opinionsAnswers[loopIndex].0 is not defined or opinionsAnswers[loopIndex].1 is not defined %}
+{% if opinionsAnswers[loopIndex].0 is not defined and opinionsAnswers[loopIndex].1 is not defined %}
     No answers yet
 {% else %}
     {% if opinionsAnswers[loopIndex].1 is defined %}

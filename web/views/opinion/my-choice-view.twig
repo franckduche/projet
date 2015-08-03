@@ -3,7 +3,7 @@ Date : {{ opinion.date }} <br/>
 Comment : {{ opinion.comment }} <br/>
 Pictures : <br/>
 {% for picture in opinion.pictureList %}
-* Picture : <img src="{{ app.request.basepath }}/pictures/{{ opinion.picture.filepath }}" width="100" /> <br/>
+* Picture : <img src="{{ app.request.basepath }}/pictures/{{ picture.filepath }}" width="100" /> <br/>
 Choose this one ? <br/>
 {% endfor %}
 --- <br/>

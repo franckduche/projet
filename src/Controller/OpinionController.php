@@ -13,9 +13,11 @@ use TellMe\Adapter\UserAdapter;
 use TellMe\Adapter\OpinionAdapter;
 use TellMe\Adapter\OpinionToAnswerAdapter;
 use TellMe\Adapter\PollAdapter;
+use TellMe\Adapter\ChoiceAdapter;
 use TellMe\Adapter\PictureAdapter;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use TellMe\Model\Poll;
+use TellMe\Model\Choice;
 
 /**
  * Description of OpinionController
@@ -165,7 +167,97 @@ class OpinionController extends BaseController {
     public function choiceAction(Request $request, Application $app)
     {
         if($this->isConnected($app)) {
-            die;
+            // Get friends
+            $user = $app['session']->get('user');
+            $userAdapter = new UserAdapter($app['db']);
+            $friendList = $userAdapter->getFriendList($user['id'], 'full');
+            $friends = array();
+            foreach($friendList as $friend) {
+                $friends[$friend->getId()] = $friend->getNickname();
+            }
+            
+            // Form creation
+            $form = $app['form.factory']->createBuilder('form')
+                ->add('comment', 'text', array(
+                    'constraints' => array(new Assert\NotBlank())
+                ))
+                ->add('files', 'file', array(
+                    'attr' => array(
+                        'accept' => 'image/*',
+                        'multiple' => 'multiple',
+                    )
+                ))
+                ->add('friends', 'choice', array(
+                    'choices' => $friends,
+                    'multiple' => true,
+                    'expanded' => true
+                ))
+                ->getForm();
+            
+            // Hack to allow several files upload
+            $formView = $form->createView();
+            $formView->children['files']->vars['full_name'] = 'form[files][]';
+
+            $form->handleRequest($request);
+
+            // Form handling
+            if ($form->isValid()) {
+                $data = $form->getData();
+                
+                // Create opinion
+                $formatedData = array(
+                    'userId' => $user['id'],
+                    'date' => date('Y-m-d'),
+                    'comment' => $data['comment'],
+                    'type' => Choice::TYPE
+                );
+                $opinionAdapter = new OpinionAdapter($app['db']);
+                $opinionId = $opinionAdapter->create($formatedData);
+
+                // Files handling
+                $files = $data['files'];
+                $pictureDataList = array();
+                
+                foreach($files as $file) {
+                    $filepath = uniqid(). '.' .$file->getClientOriginalExtension();
+                    try {
+                        $file->move(__DIR__.'/../../web/pictures', $filepath); 
+                    } catch(FileException $e) {
+                        $filepath = null;
+                    }
+                    $pictureDataList[] = array(
+                        'filename' => $file->getClientOriginalName(),
+                        'filepath' => $filepath,
+                        'opinionId' => $opinionId
+                    );
+                }
+                
+                // Create choice
+                $choiceAdapter = new ChoiceAdapter($app['db']);
+                $choiceAdapter->create(array(
+                    'opinionId' => $opinionId
+                ));
+                
+                // Create pictures
+                $pictureAdapter = new PictureAdapter($app['db']);
+                foreach($pictureDataList as $pictureData) {
+                    $pictureAdapter->create($pictureData);
+                }
+                
+                // Create opinionToAnswer
+                $opinionToAnswerAdapter = new OpinionToAnswerAdapter($app['db']);
+                foreach($data['friends'] as $friendId) {
+                    $opinionToAnswerAdapter->create(array(
+                        'userId' => $friendId,
+                        'opinionId' => $opinionId
+                    ));
+                }
+                
+                return $app->redirect($app['url_generator']->generate('opinions'));
+            }
+
+            // display the form
+            return $app['twig']->render('opinion/choice-add-form.twig', array('form' => $formView));
         } else {
             return $app->redirect($app['url_generator']->generate('login'));
         }

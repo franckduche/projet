@@ -1,0 +1,15 @@
+{% extends "base.twig" %}
+
+{% block content %}
+
+<form action="#" method="post" {{ form_enctype(form) }}>
+    {{ form_label(form.files) }}
+    {{ form_errors(form.files) }}
+    {{ form_widget(form.files, { 'attr': {'name': 'files[]'} }) }}
+
+    {{ form_rest(form) }}
+
+    <input type="submit" name="submit" />
+</form>
+
+{% endblock %}

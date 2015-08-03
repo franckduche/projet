@@ -1,7 +1,7 @@
 --- <br/>
 Date : {{ opinion.date }} <br/>
 Comment : {{ opinion.comment }} <br/>
-Picture : <img src="{{ app.request.basepath }}/pictures/{{ opinion.picture.filepath }}" width="50" /> <br/>
+Picture : <img src="{{ app.request.basepath }}/pictures/{{ opinion.picture.filepath }}" width="100" /> <br/>
 {% if opinionToAnswer.answer is null %}
     <a href="{{ url('answer', {'opinionAnswerId':opinionToAnswer.id, 'answer':1}) }} ">Like</a> |
     <a href="{{ url('answer', {'opinionAnswerId':opinionToAnswer.id, 'answer':0}) }} ">Dislike</a> <br/>

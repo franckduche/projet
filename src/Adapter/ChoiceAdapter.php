@@ -16,6 +16,7 @@ use TellMe\Model\Picture;
  */
 class ChoiceAdapter extends BaseAdapter {
     
+    protected $tableName = 'choice';
     protected $pictureTableName = 'picture';
     
     public function fill(Choice &$choice)
@@ -34,5 +35,12 @@ class ChoiceAdapter extends BaseAdapter {
         }
         
         $choice->setPictureList($pictureList);
+    }
+    
+    public function create($data)
+    {
+        $this->conn->insert($this->tableName, $data);
+        
+        return $this->conn->lastInsertId();
     }
 }
